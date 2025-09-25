@@ -2,7 +2,7 @@ package com.pluralsight;
 
 public class Movie {
     public static void main(String[] args) {
-        String movieTitle = "Tokyo Tribe";
+        String movieTitle = "Tokyo Tribe!";
         int friends = 6;
         double pizzaPrice = 2.99;
         boolean popcorn = true;
