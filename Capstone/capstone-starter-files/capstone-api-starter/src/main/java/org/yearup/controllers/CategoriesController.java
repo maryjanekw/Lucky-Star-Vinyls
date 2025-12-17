@@ -14,8 +14,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/categories") // Base URL: http://localhost:8080/categories
 @CrossOrigin // Allow cross-site requests
-public class CategoriesController
-{
+public class CategoriesController {
+
     private CategoryDao categoryDao;
     private ProductDao productDao;
 
@@ -24,7 +24,6 @@ public class CategoriesController
         this.categoryDao = categoryDao;
         this.productDao = productDao;
     }
-
 
     @GetMapping
     public List<Category> getAll() {
@@ -50,18 +49,15 @@ public class CategoriesController
         return categoryDao.create(category);
     }
 
-
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public void updateCategory(@PathVariable int id, @RequestBody Category category) {
         categoryDao.update(id, category);
     }
 
-
-    // add annotation to call this method for a DELETE action - the url path must include the categoryId
-    // add annotation to ensure that only an ADMIN can call this function
-    public void deleteCategory(@PathVariable int id)
-    {
-        // delete the category by id
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteCategory(@PathVariable int id) {
+        categoryDao.delete(id);
     }
 }
