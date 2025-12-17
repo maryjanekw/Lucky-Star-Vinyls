@@ -14,13 +14,12 @@ import java.util.List;
 @RestController
 @RequestMapping("products")
 @CrossOrigin
-public class ProductsController
-{
+public class ProductsController {
+
     private ProductDao productDao;
 
     @Autowired
-    public ProductsController(ProductDao productDao)
-    {
+    public ProductsController(ProductDao productDao) {
         this.productDao = productDao;
     }
 
@@ -30,14 +29,17 @@ public class ProductsController
                                 @RequestParam(name="minPrice", required = false) BigDecimal minPrice,
                                 @RequestParam(name="maxPrice", required = false) BigDecimal maxPrice,
                                 @RequestParam(name="subCategory", required = false) String subCategory
-                                )
-    {
-        try
-        {
-            return productDao.search(categoryId, minPrice, maxPrice, subCategory);
-        }
-        catch(Exception ex)
-        {
+                                ) {
+        try {
+            if(minPrice != null && maxPrice != null && minPrice.compareTo(maxPrice) > 0)
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Minimum price cannot be greater " +
+                        "than max price.");
+
+            String normalizedSub = (subCategory == null) ? null : subCategory.trim().toLowerCase();
+
+            return productDao.search(categoryId, minPrice, maxPrice, normalizedSub);
+
+        } catch(Exception ex) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
         }
     }
