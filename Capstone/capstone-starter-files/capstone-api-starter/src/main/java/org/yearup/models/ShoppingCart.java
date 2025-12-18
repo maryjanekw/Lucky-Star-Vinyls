@@ -31,6 +31,15 @@ public class ShoppingCart {
         items.remove(productId);
     }
 
+    public void updateQuantity(int productId, int quantity){
+        if(items.containsKey(productId)){
+            ShoppingCartItem item = items.get(productId);
+            item.setQuantity(quantity);
+        }
+    }
+
+
+
     public BigDecimal getTotal() {
         BigDecimal total = items.values()
                                 .stream()
