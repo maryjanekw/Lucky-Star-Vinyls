@@ -38,6 +38,12 @@ public class ShoppingCart {
         }
     }
 
+    public void incrementQuantity(int productId){
+        if(items.containsKey(productId)){
+            ShoppingCartItem item = items.get(productId);
+            item.setQuantity(item.getQuantity() + 1);
+        }
+    }
 
 
     public BigDecimal getTotal() {
