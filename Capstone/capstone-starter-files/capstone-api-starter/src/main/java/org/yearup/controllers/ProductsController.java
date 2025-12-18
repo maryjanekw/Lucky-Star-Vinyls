@@ -40,7 +40,7 @@ public class ProductsController {
         } catch (ResponseStatusException rse){
             throw rse;
         } catch(Exception ex) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad. 1");
         }
     }
 
@@ -55,7 +55,7 @@ public class ProductsController {
         } catch(ResponseStatusException rse){
             throw rse;
         } catch(Exception ex) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad. 2");
         }
     }
 
@@ -65,7 +65,7 @@ public class ProductsController {
         try {
             return productDao.create(product);
         } catch(Exception ex) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.3");
         }
     }
 
@@ -80,7 +80,7 @@ public class ProductsController {
         } catch(ResponseStatusException rse){
             throw rse;
         } catch(Exception ex) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad. 4");
         }
     }
 
@@ -96,7 +96,7 @@ public class ProductsController {
         } catch(ResponseStatusException rse){
             throw rse;
         } catch(Exception ex) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.5");
         }
     }
 }

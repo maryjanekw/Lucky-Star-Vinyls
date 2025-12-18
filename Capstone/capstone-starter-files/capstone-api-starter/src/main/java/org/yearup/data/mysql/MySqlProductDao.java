@@ -22,7 +22,8 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
     @Override
     public List<Product> search(Integer categoryId, BigDecimal minPrice, BigDecimal maxPrice, String subCategory) {
         List<Product> products = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE 1=1");
+        StringBuilder sql = new StringBuilder("SELECT product_id, name, price, category_id, description," +
+                "subcategory, image_url, stock, featured FROM products WHERE 1=1");
         List<Object> params = new ArrayList<>();
 
         if (categoryId != null) {
@@ -37,10 +38,12 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
             sql.append(" AND price <= ?");
             params.add(maxPrice);
         }
-        if (subCategory != null && !subCategory.isEmpty()) {
-            sql.append(" AND subcategory LIKE ?");
-            params.add("%" + subCategory + "%");
+        if (subCategory != null && !subCategory.isBlank()) {
+            sql.append(" AND LOWER(REPLACE(subcategory, '&amp;', '&')) = ?");
+            params.add(subCategory.trim().toLowerCase());
         }
+
+        sql.append(" ORDER BY name ASC");
 
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql.toString())) {
@@ -49,12 +52,13 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
                 statement.setObject(i + 1, params.get(i));
             }
 
-            ResultSet row = statement.executeQuery();
-            while (row.next()) {
-                products.add(mapRow(row));
+            try (ResultSet row = statement.executeQuery()){
+                while (row.next()) {
+                    products.add(mapRow(row));
+                }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error searching products", e);
         }
 
         return products;
@@ -115,14 +119,12 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
     }
 
     @Override
-    public Product create(Product product)
-    {
+    public Product create(Product product) {
 
         String sql = "INSERT INTO products(name, price, category_id, description, subcategory, image_url, stock, featured) " +
                 " VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
 
-        try (Connection connection = getConnection())
-        {
+        try (Connection connection = getConnection()) {
             PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setString(1, product.getName());
             statement.setBigDecimal(2, product.getPrice());
@@ -191,8 +193,7 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
     }
 
     @Override
-    public void delete(int productId)
-    {
+    public void delete(int productId) {
 
         String sql = "DELETE FROM products " +
                 " WHERE product_id = ?;";
@@ -210,14 +211,16 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
         }
     }
 
-    protected static Product mapRow(ResultSet row) throws SQLException
-    {
+    protected static Product mapRow(ResultSet row) throws SQLException {
         int productId = row.getInt("product_id");
         String name = row.getString("name");
         BigDecimal price = row.getBigDecimal("price");
         int categoryId = row.getInt("category_id");
         String description = row.getString("description");
-        String subCategory = row.getString("subcategory");
+
+        String subCategoryRaw = row.getString("subcategory");
+        String subCategory = subCategoryRaw == null ? null : subCategoryRaw.replace("&amp;", "&");
+
         int stock = row.getInt("stock");
         boolean isFeatured = row.getBoolean("featured");
         String imageUrl = row.getString("image_url");
