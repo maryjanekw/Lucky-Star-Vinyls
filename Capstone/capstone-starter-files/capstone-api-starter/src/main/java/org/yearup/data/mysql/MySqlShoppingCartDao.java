@@ -72,11 +72,12 @@ public class MySqlShoppingCartDao implements ShoppingCartDao {
 
     @Override
     public void clearCart(int userId) {
+        String sql = "DELETE FROM shopping_cart WHERE user_id = ?";
+        jdbcTemplate.update(sql, userId);
 
     }
 
     @Override
     public void removeProduct(int userId, int productId) {
-
     }
 }
