@@ -7,18 +7,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
+
     private int orderId;
     private int userId;
+    private LocalDateTime date;
+    private String address;
+    private String city;
+    private String state;
+    private String zip;
+    private BigDecimal shippingAmount;
     private BigDecimal total;
-    private LocalDateTime orderDate;
     private List<OrderLineItem> lineItems = new ArrayList<>();
 
 
-    public Order(int orderId, int userId, BigDecimal total, LocalDateTime orderDate) {
+
+    public Order() {}
+
+    public Order(int orderId, int userId, LocalDateTime date, String address, String city,
+                 String state, String zip, BigDecimal shippingAmount, BigDecimal total) {
         this.orderId = orderId;
         this.userId = userId;
+        this.date = date;
+        this.address = address;
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
+        this.shippingAmount = shippingAmount;
         this.total = total;
-        this.orderDate = orderDate;
     }
 
     public int getOrderId() {
@@ -37,20 +52,60 @@ public class Order {
         this.userId = userId;
     }
 
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getZip() {
+        return zip;
+    }
+
+    public void setZip(String zip) {
+        this.zip = zip;
+    }
+
+    public BigDecimal getShippingAmount() {
+        return shippingAmount;
+    }
+
+    public void setShippingAmount(BigDecimal shippingAmount) {
+        this.shippingAmount = shippingAmount;
+    }
+
     public BigDecimal getTotal() {
         return total;
     }
 
     public void setTotal(BigDecimal total) {
         this.total = total;
-    }
-
-    public LocalDateTime getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(LocalDateTime orderDate) {
-        this.orderDate = orderDate;
     }
 
     public List<OrderLineItem> getLineItems() {

@@ -5,44 +5,31 @@ import java.math.BigDecimal;
 
 public class OrderLineItem {
 
-
-    private int lineItemId;
+    private int orderLineItemId;
     private int orderId;
     private int productId;
+    private BigDecimal salesPrice;
     private int quantity;
-    private BigDecimal price;
+    private BigDecimal discount;
 
+    public OrderLineItem() {}
 
-    public OrderLineItem(int lineItemId, int orderId, int productId, int quantity, BigDecimal price) {
-        this.lineItemId = lineItemId;
+    public OrderLineItem(int orderLineItemId, int orderId, int productId,
+                         BigDecimal salesPrice, int quantity, BigDecimal discount) {
+        this.orderLineItemId = orderLineItemId;
         this.orderId = orderId;
         this.productId = productId;
+        this.salesPrice = salesPrice;
         this.quantity = quantity;
-        this.price = price;
+        this.discount = discount;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public int getOrderLineItemId() {
+        return orderLineItemId;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public int getProductId() {
-        return productId;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public void setOrderLineItemId(int orderLineItemId) {
+        this.orderLineItemId = orderLineItemId;
     }
 
     public int getOrderId() {
@@ -53,11 +40,35 @@ public class OrderLineItem {
         this.orderId = orderId;
     }
 
-    public int getLineItemId() {
-        return lineItemId;
+    public int getProductId() {
+        return productId;
     }
 
-    public void setLineItemId(int lineItemId) {
-        this.lineItemId = lineItemId;
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
+    public BigDecimal getSalesPrice() {
+        return salesPrice;
+    }
+
+    public void setSalesPrice(BigDecimal salesPrice) {
+        this.salesPrice = salesPrice;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public BigDecimal getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(BigDecimal discount) {
+        this.discount = discount;
     }
 }
