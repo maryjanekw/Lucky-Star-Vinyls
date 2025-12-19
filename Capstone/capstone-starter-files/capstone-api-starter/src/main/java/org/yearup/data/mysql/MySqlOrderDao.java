@@ -2,10 +2,16 @@ package org.yearup.data.mysql;
 
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.yearup.data.OrderDao;
 import org.yearup.models.Order;
 import org.yearup.models.ShippingInfo;
+
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.sql.Timestamp;
 
 @Repository
 public class MySqlOrderDao implements OrderDao {
@@ -19,54 +25,43 @@ public class MySqlOrderDao implements OrderDao {
     @Override
     public Order createOrder(Order order) {
         String sql = """
-            INSERT INTO orders (user_id, date, address, city, state, zip, shipping_amount, total)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO orders (user_id, date, shipping_amount)
+                VALUES (?, ?, ?)
         """;
 
-        ShippingInfo shippingInfo = order.getShippingInfo();
+        KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(sql,
-                order.getUserId(),
-                java.sql.Timestamp.valueOf(order.getDate()),
-                shippingInfo.getAddress(),
-                shippingInfo.getCity(),
-                shippingInfo.getState(),
-                shippingInfo.getZip(),
-                shippingInfo.getShippingAmount(),
-                order.getTotal()
-        );
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, order.getUserId());
+            ps.setTimestamp(2, Timestamp.valueOf(order.getDate()));
+            ps.setBigDecimal(3, order.getShippingAmount());
 
+            return ps;
 
-        Integer orderId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
-        order.setOrderId(orderId);
+        }, keyHolder);
+
+        order.setOrderId(keyHolder.getKey().intValue());
+        System.out.println("DEBUG: Generated Order ID: " + order.getOrderId());
+
         return order;
+
     }
 
     @Override
     public Order getOrderById(int orderId) {
         String sql = """
-                
-                SELECT order_id, user_id, date, address, city, state, zip, shipping_amount, total
-                            FROM orders WHERE order_id = ?
-                
+                SELECT order_id, user_id, date, total
+                            FROM orders 
+                            WHERE order_id = ?
                 """;
 
-
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
-            ShippingInfo shippingInfo = new ShippingInfo(
-                    rs.getString("address"),
-                    rs.getString("city"),
-                    rs.getString("state"),
-                    rs.getString("zip"),
-                    rs.getBigDecimal("shipping_amount")
-            );
-
             Order order = new Order();
             order.setOrderId(rs.getInt("order_id"));
             order.setUserId(rs.getInt("user_id"));
             order.setDate(rs.getTimestamp("date").toLocalDateTime());
-            order.setTotal(rs.getBigDecimal("total"));
-            order.setShippingInfo(shippingInfo);
+            order.setShippingAmount(rs.getBigDecimal("shipping_amount"));
 
             return order;
         }, orderId);

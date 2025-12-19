@@ -21,8 +21,9 @@ public class MySqlOrderLineItemDao implements OrderLineItemDao {
     public void addLineItem(OrderLineItem item) {
         String sql = """
                 INSERT INTO order_line_items (order_id, product_id, sales_price, quantity, discount)
-                            VALUES (?, ?, ?, ?, ?
-                """;
+                    VALUES (?, ?, ?, ?, ?)
+                 """;
+
 
         jdbcTemplate.update(sql,
                 item.getOrderId(),

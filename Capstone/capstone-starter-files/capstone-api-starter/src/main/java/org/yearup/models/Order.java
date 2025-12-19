@@ -11,20 +11,19 @@ public class Order {
     private int orderId;
     private int userId;
     private LocalDateTime date;
-    private BigDecimal total;
-    private ShippingInfo shippingInfo;
+    private BigDecimal shippingAmount;
+//    private ShippingInfo shippingInfo;
     private List<OrderLineItem> lineItems = new ArrayList<>();
 
 
 
     public Order() {}
 
-    public Order(int orderId, int userId, LocalDateTime date, BigDecimal total, ShippingInfo shippingInfo) {
+    public Order(int orderId, int userId, LocalDateTime date, BigDecimal shippingAmount) {
         this.orderId = orderId;
         this.userId = userId;
         this.date = date;
-        this.total = total;
-        this.shippingInfo = shippingInfo;
+        this.shippingAmount = shippingAmount;
     }
 
     public int getOrderId() {
@@ -51,20 +50,12 @@ public class Order {
         this.date = date;
     }
 
-    public BigDecimal getTotal() {
-        return total;
+    public BigDecimal getShippingAmount() {
+        return shippingAmount;
     }
 
-    public void setTotal(BigDecimal total) {
-        this.total = total;
-    }
-
-    public ShippingInfo getShippingInfo() {
-        return shippingInfo;
-    }
-
-    public void setShippingInfo(ShippingInfo shippingInfo) {
-        this.shippingInfo = shippingInfo;
+    public void setShippingAmount(BigDecimal total) {
+        this.shippingAmount = shippingAmount;
     }
 
     public List<OrderLineItem> getLineItems() {
