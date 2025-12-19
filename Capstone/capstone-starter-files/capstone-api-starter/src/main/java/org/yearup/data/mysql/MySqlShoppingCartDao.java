@@ -51,7 +51,17 @@ public class MySqlShoppingCartDao implements ShoppingCartDao {
 
     @Override
     public void addProduct(int userId, int productId) {
+        String checkSql = "SELECT quantity FROM shopping_cart WHERE user_id =? AND product_id = ?";
+        Integer existingQty = jdbcTemplate.query(checkSql, rs -> rs.next() ? rs.getInt("quantity"):
+                null, userId, productId);
 
+        if(existingQty != null) {
+            String updateSQL = "UPDATE shopping_cart SET quantity = quantity + 1 WHERE user_id = ? AND product_id = ?";
+            jdbcTemplate.update(updateSQL, userId, productId);
+        }else{
+            String insertSql = "INSERT INTO shopping_cart (user_id, product_id, quantity) VALUES (?, ?, 1)";
+            jdbcTemplate.update(insertSql, userId, productId);
+        }
     }
 
     @Override
