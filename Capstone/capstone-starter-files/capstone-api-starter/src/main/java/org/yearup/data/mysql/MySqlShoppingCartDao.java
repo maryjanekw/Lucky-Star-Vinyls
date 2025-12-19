@@ -22,11 +22,11 @@ public class MySqlShoppingCartDao implements ShoppingCartDao {
     @Override
     public ShoppingCart getByUserId(int userId) {
         String sql = """
-            SELECT p.product_id, p.name, p.price, p.description, p.category_id, 
-                   p.sub_category, p.stock, p.image_url, p.featured, sc.quantity
-            FROM shopping_cart sc
-            JOIN products p ON sc.product_id = p.product_id
-            WHERE sc.user_id = ?
+                SELECT p.product_id, p.name, p.price, p.description, p.category_id,
+                               p.subcategory, p.stock, p.image_url, p.featured, sc.quantity
+                FROM shopping_cart sc
+                JOIN products p ON sc.product_id = p.product_id
+                WHERE sc.user_id = ?
         """;
 
         List<ShoppingCartItem> items = jdbcTemplate.query(sql, (rs, rowNum) -> {
@@ -36,7 +36,7 @@ public class MySqlShoppingCartDao implements ShoppingCartDao {
                     rs.getBigDecimal("price"),
                     rs.getInt("category_id"),
                     rs.getString("description"),
-                    rs.getString("sub_category"),
+                    rs.getString("subcategory"),
                     rs.getInt("stock"),
                     rs.getBoolean("featured"),
                     rs.getString("image_url"));

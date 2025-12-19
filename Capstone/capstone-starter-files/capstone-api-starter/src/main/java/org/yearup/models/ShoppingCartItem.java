@@ -10,10 +10,6 @@ public class ShoppingCartItem {
     private int quantity;
     private BigDecimal discountPercent;
 
-    public ShoppingCartItem() {
-        this.discountPercent = BigDecimal.ZERO;
-        this.quantity = 1;
-    }
 
     public ShoppingCartItem(Product product, int quantity) {
         this.product = product;
