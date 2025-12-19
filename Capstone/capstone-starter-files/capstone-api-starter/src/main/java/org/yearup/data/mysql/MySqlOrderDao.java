@@ -36,4 +36,29 @@ public class MySqlOrderDao implements OrderDao {
         return order;
     }
 
+    @Override
+    public Order getOrderById(int orderId) {
+        String sql = """
+                
+                SELECT order_id, user_id, date, address, city, state, zip, shipping_amount
+                            FROM orders WHERE order_id = ?
+                
+                """;
+
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
+            Order order = new Order();
+            order.setOrderId(rs.getInt("order_id"));
+            order.setUserId(rs.getInt("user_id"));
+
+            order.setDate(rs.getTimestamp("date").toLocalDateTime());
+            order.setAddress(rs.getString("address"));
+            order.setCity(rs.getString("city"));
+            order.setState(rs.getString("state"));
+            order.setZip(rs.getString("zip"));
+
+            order.setShippingAmount(rs.getBigDecimal("shipping_amount"));
+
+            return order;
+        }, orderId);
+    }
 }
