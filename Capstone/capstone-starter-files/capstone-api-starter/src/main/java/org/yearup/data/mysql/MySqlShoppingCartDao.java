@@ -66,7 +66,8 @@ public class MySqlShoppingCartDao implements ShoppingCartDao {
 
     @Override
     public void updateQuantity(int userId, int productId, int quantity) {
-
+        String sql = "UPDATE shopping_cart SET quantity = ? WHERE user_id = ? AND product_id = ?";
+        jdbcTemplate.update(sql, quantity, userId, productId);
     }
 
     @Override
