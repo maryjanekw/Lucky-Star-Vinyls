@@ -45,14 +45,26 @@ public class ShoppingCart {
         }
     }
 
+    public void clear() {
+        items.clear();
+    }
+
+    public int size() {
+        return items.size();
+    }
 
     public BigDecimal getTotal() {
         BigDecimal total = items.values()
                                 .stream()
                                 .map(i -> i.getLineTotal())
                                 .reduce( BigDecimal.ZERO, (lineTotal, subTotal) -> subTotal.add(lineTotal));
-
         return total;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Shopping Chart:\n");
+        items.values().forEach(item -> sb.append(item).append(getTotal()));
+        return sb.toString();
+    }
 }
