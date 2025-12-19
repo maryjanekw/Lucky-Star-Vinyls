@@ -78,7 +78,7 @@ public class MySqlShoppingCartDao implements ShoppingCartDao {
 
     @Override
     public void removeProduct(int userId, int productId) {
-        String sql = "DELETE FROM shopping_cart WHERE user        String sql = "DELETE FROM shopping_cart WHERE user_id = ? AND product_id = ?";
+        String sql = "DELETE FROM shopping_cart WHERE user_id = ? AND product_id = ?";
         jdbcTemplate.update(sql, userId, productId);
     }
 }
